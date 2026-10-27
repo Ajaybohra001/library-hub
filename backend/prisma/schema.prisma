@@ -23,15 +23,16 @@ model User {
 }
 
 model Book {
-  id        String   @id @default(uuid())
-  title     String
-  author    String
-  isbn      String   @unique
-  quantity  Int      @default(1)
-  available Int      @default(1)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  loans     Loan[]
+  id             String   @id @default(uuid())
+  title          String
+  author         String
+  isbn           String   @unique
+  description    String?
+  totalCopies    Int      
+  availableCopies Int     
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  loans          Loan[]
 }
 
 model Loan {

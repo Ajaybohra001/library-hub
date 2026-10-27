@@ -8,7 +8,13 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   app.setGlobalPrefix('api');
   app.enableCors({ origin: config.get<string>('CORS_ORIGIN', 'http://localhost:5173') });
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
   await app.listen(config.get<number>('BACKEND_PORT', 3000));
 }
 bootstrap();
