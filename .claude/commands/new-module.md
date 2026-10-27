@@ -5,7 +5,7 @@ argument-hint: <module-name e.g. loans, auth, fines>
 
 You are scaffolding a new NestJS feature module named "$ARGUMENTS" inside the LibraryHub monorepo.
 
-First, read these files for context:
+First, load and read the skill at .claude/skills/nest-module.md — follow its conventions exactly for every file you create.
 
 - CLAUDE.md (project rules and conventions)
 - backend/src/books/books.module.ts
