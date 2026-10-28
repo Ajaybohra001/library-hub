@@ -1,4 +1,14 @@
 {
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://libraryhub_mcp:mcp_readonly_pass@localhost:5432/library_hub"
+      ]
+    }
+  },
   "hooks": {
     "PostToolUse": [
       {
@@ -6,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx --prefix backend prettier --write \"${file}\" 2>/dev/null || true"
+            "command": "npx --prefix C:/Users/ajay.bohra/library-hub/backend prettier --write \"${file}\" 2>nul || exit 0"
           }
         ]
       }
@@ -17,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"const f=process.env.CLAUDE_TOOL_INPUT_FILE_PATH||''; if(f.includes('.env')&&!f.includes('.env.example')){console.error('BLOCKED: Never edit .env files');process.exit(2);}\" "
+            "command": "node -e \"const f=process.env.CLAUDE_TOOL_INPUT_FILE_PATH||process.env.file||''; if(f.includes('.env')&&!f.includes('.env.example')){process.stderr.write('BLOCKED: Never edit .env files\\n');process.exit(2);}\""
           }
         ]
       }
@@ -27,7 +37,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node -e \"console.log('✅ Claude finished at ' + new Date().toLocaleTimeString())\" "
+            "command": "node -e \"process.stdout.write('Task complete at ' + new Date().toLocaleTimeString() + '\\n')\""
           }
         ]
       }

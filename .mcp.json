@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://libraryhub_mcp:mcp_readonly_pass@localhost:5432/library_hub"
+      ]
+    }
+  }
+}

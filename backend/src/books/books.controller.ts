@@ -9,7 +9,9 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { StaffGuard } from "../common/guards/staff.guard";
+import { Roles } from "../common/decorators/roles.decorator";
+import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
+import { RolesGuard } from "../common/guards/roles.guard";
 import { BooksService } from "./books.service";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { ListBooksDto } from "./dto/list-books.dto";
@@ -30,13 +32,15 @@ export class BooksController {
   }
 
   @Post()
-  @UseGuards(StaffGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("STAFF")
   create(@Body() dto: CreateBookDto) {
     return this.booksService.createBook(dto);
   }
 
   @Patch(":id")
-  @UseGuards(StaffGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles("STAFF")
   update(
     @Param("id", new ParseUUIDPipe({ version: "4" })) id: string,
     @Body() dto: UpdateBookDto,
