@@ -7,5 +7,16 @@
     "build": "npm --prefix backend run build && npm --prefix frontend run build",
     "db:generate": "npm --prefix backend run prisma:generate",
     "db:migrate": "npm --prefix backend run prisma:migrate"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.105.0",
+    "axios": "^1.21.0",
+    "react-router-dom": "^7.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "autoprefixer": "^10.6.2",
+    "postcss": "^8.5.32",
+    "tailwindcss": "^4.3.3"
   }
 }

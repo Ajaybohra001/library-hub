@@ -105,6 +105,12 @@ export class LoansService {
         returnedAt: true,
         renewalCount: true,
         finePaise: true,
+        book: {
+          select: {
+            title: true,
+            author: true,
+          },
+        },
       },
     });
     return { items };

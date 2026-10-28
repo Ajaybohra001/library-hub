@@ -6,8 +6,47 @@
 body {
   margin: 0;
 }
+nav {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: #17202a;
+}
+nav a,
+nav button {
+  color: white;
+}
 main {
   max-width: 960px;
   margin: 0 auto;
-  padding: 4rem 1.5rem;
+  padding: 2rem 1.5rem;
+}
+section {
+  display: grid;
+  gap: 1rem;
+}
+form {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 28rem;
+}
+label {
+  display: grid;
+  gap: 0.25rem;
+}
+input,
+textarea,
+button {
+  font: inherit;
+  padding: 0.45rem;
+}
+ul {
+  padding-left: 1.25rem;
+}
+li {
+  margin: 0.75rem 0;
+}
+button {
+  cursor: pointer;
 }

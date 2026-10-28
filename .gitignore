@@ -7,3 +7,5 @@ coverage/
 .vscode/
 *.log
 backend/prisma/dev.db
+
+.mcp.json
