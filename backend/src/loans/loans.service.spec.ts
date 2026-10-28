@@ -10,6 +10,7 @@ describe("LoansService", () => {
   const mockPrisma = {
     user: { findUnique: jest.fn() },
     book: { findUnique: jest.fn(), update: jest.fn(), updateMany: jest.fn() },
+    reservation: { findFirst: jest.fn(), update: jest.fn() },
     loan: {
       count: jest.fn(),
       findFirst: jest.fn(),
@@ -88,6 +89,10 @@ describe("LoansService", () => {
       mockPrisma.$transaction.mockImplementation(async (callback: any) =>
         callback({
           book: { update: jest.fn() },
+          reservation: {
+            findFirst: jest.fn().mockResolvedValue(null),
+            update: jest.fn(),
+          },
           loan: { update: jest.fn().mockResolvedValue({ id: "loan-id" }) },
         }),
       );
