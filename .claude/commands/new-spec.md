@@ -26,23 +26,28 @@ The command asks three questions, then generates the spec.
 # Feature N: <Feature name>
 
 ## Goal
+
 One paragraph: what this feature does and why it exists.
 
 ## Requirements
+
 Numbered, specific, testable requirements. For each API endpoint include
 the HTTP method and path, request shape, response shape, status codes,
 validation rules and error cases.
 
 ## Out of scope
+
 What this feature deliberately does not include. Anything from the
 business rules that belongs to another feature goes here.
 
 ## Acceptance criteria
+
 A checklist where each item is independently verifiable. Include the
 happy path, at least two error cases, unit test coverage, and no
 secrets or .env files committed.
 
 ## Curl checks (for API features)
+
 Copy-pasteable curl commands for every endpoint.
 
 5. Save the file to `.claude/specs/0N-<feature-name>.md`.

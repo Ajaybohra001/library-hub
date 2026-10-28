@@ -1,8 +1,8 @@
 module.exports = {
-  moduleFileExtensions: ['js', 'json', 'ts'],
-  rootDir: 'src',
-  testRegex: '.*\\.spec\\.ts$',
+  moduleFileExtensions: ["js", "json", "ts"],
+  rootDir: "src",
+  testRegex: ".*\\.spec\\.ts$",
   transform: {
-    '^.+\\.ts$': ['ts-jest', { tsconfig: 'tsconfig.json' }],
+    "^.+\\.ts$": ["ts-jest", { tsconfig: "tsconfig.json" }],
   },
 };
