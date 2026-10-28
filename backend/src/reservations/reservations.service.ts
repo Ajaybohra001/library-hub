@@ -20,37 +20,43 @@ export class ReservationsService {
       throw new ForbiddenException();
     if (!memberId) throw new ConflictException("Staff must provide memberId");
 
-    const [member, book, loan, duplicate, activeCount] = await Promise.all([
-      this.prisma.user.findUnique({
-        where: { id: memberId },
-        select: { id: true },
-      }),
-      this.prisma.book.findUnique({
-        where: { id: dto.bookId },
-        select: { id: true, availableCopies: true },
-      }),
-      this.prisma.loan.findFirst({
-        where: { userId: memberId, bookId: dto.bookId, returnedAt: null },
-      }),
-      this.prisma.reservation.findFirst({
-        where: {
-          userId: memberId,
-          bookId: dto.bookId,
-          status: { in: [ReservationStatus.PENDING, ReservationStatus.HOLD] },
-        },
-      }),
-      this.prisma.reservation.count({
-        where: {
-          userId: memberId,
-          status: { in: [ReservationStatus.PENDING, ReservationStatus.HOLD] },
-        },
-      }),
-    ]);
+    const [member, book, loan, unpaidFine, duplicate, activeCount] =
+      await Promise.all([
+        this.prisma.user.findUnique({
+          where: { id: memberId },
+          select: { id: true },
+        }),
+        this.prisma.book.findUnique({
+          where: { id: dto.bookId },
+          select: { id: true, availableCopies: true },
+        }),
+        this.prisma.loan.findFirst({
+          where: { userId: memberId, bookId: dto.bookId, returnedAt: null },
+        }),
+        this.prisma.loan.findFirst({
+          where: { userId: memberId, finePaise: { gt: 0 }, paidAt: null },
+          select: { id: true },
+        }),
+        this.prisma.reservation.findFirst({
+          where: {
+            userId: memberId,
+            bookId: dto.bookId,
+            status: { in: [ReservationStatus.PENDING, ReservationStatus.HOLD] },
+          },
+        }),
+        this.prisma.reservation.count({
+          where: {
+            userId: memberId,
+            status: { in: [ReservationStatus.PENDING, ReservationStatus.HOLD] },
+          },
+        }),
+      ]);
     if (!member) throw new NotFoundException("Member not found");
     if (!book) throw new NotFoundException("Book not found");
     if (book.availableCopies > 0)
       throw new ConflictException("Book is available");
     if (loan) throw new ConflictException("Member already has this book");
+    if (unpaidFine) throw new ConflictException("Member has unpaid fines");
     if (duplicate)
       throw new ConflictException("Active reservation already exists");
     if (activeCount >= 3)
