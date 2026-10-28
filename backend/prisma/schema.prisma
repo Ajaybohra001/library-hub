@@ -67,6 +67,7 @@ model Loan {
   returnedAt   DateTime?
   renewalCount Int       @default(0)
   finePaise    Int       @default(0)
+  paidAt       DateTime?
   user       User      @relation(fields: [userId], references: [id])
   book       Book      @relation(fields: [bookId], references: [id])
   @@index([userId])

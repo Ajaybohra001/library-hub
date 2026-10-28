@@ -23,18 +23,26 @@ export class LoansService {
     }
     if (!memberId) throw new ConflictException("Staff must provide memberId");
 
-    const [member, book, activeCount, duplicate] = await Promise.all([
-      this.prisma.user.findUnique({ where: { id: memberId } }),
-      this.prisma.book.findUnique({ where: { id: dto.bookId } }),
-      this.prisma.loan.count({ where: { userId: memberId, returnedAt: null } }),
-      this.prisma.loan.findFirst({
-        where: { userId: memberId, bookId: dto.bookId, returnedAt: null },
-      }),
-    ]);
+    const [member, book, activeCount, duplicate, unpaidFine] =
+      await Promise.all([
+        this.prisma.user.findUnique({ where: { id: memberId } }),
+        this.prisma.book.findUnique({ where: { id: dto.bookId } }),
+        this.prisma.loan.count({
+          where: { userId: memberId, returnedAt: null },
+        }),
+        this.prisma.loan.findFirst({
+          where: { userId: memberId, bookId: dto.bookId, returnedAt: null },
+        }),
+        this.prisma.loan.findFirst({
+          where: { userId: memberId, finePaise: { gt: 0 }, paidAt: null },
+          select: { id: true },
+        }),
+      ]);
     if (!member) throw new NotFoundException("Member not found");
     if (!book) throw new NotFoundException("Book not found");
     if (activeCount >= 3)
       throw new ConflictException("Maximum active loans reached");
+    if (unpaidFine) throw new ConflictException("Member has unpaid fines");
     if (duplicate) throw new ConflictException("Member already has this book");
     if (book.availableCopies < 1)
       throw new ConflictException("Book is unavailable");
