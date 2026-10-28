@@ -127,10 +127,24 @@ export class LoansService {
         ),
       ) * 100;
     return this.prisma.$transaction(async (tx) => {
-      await tx.book.update({
-        where: { id: loan.bookId },
-        data: { availableCopies: { increment: 1 } },
+      const reservation = await tx.reservation.findFirst({
+        where: { bookId: loan.bookId, status: "PENDING" },
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
       });
+      if (reservation) {
+        await tx.reservation.update({
+          where: { id: reservation.id },
+          data: {
+            status: "HOLD",
+            holdExpiresAt: new Date(returnedAt.getTime() + 48 * 60 * 60 * 1000),
+          },
+        });
+      } else {
+        await tx.book.update({
+          where: { id: loan.bookId },
+          data: { availableCopies: { increment: 1 } },
+        });
+      }
       return tx.loan.update({
         where: { id },
         data: { returnedAt, finePaise },
